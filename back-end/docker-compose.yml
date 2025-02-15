@@ -1,0 +1,52 @@
+services:
+  db:
+    build:
+      context: ./postgres
+      dockerfile: Dockerfile
+    container_name: postgres_db
+    restart: always
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - DB_NAME=${DB_NAME}
+      - DB_SCHEMA=${DB_SCHEMA}
+    ports:
+      - "${DB_PORT}:${DB_PORT}"
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+      - ./postgres/init.sh:/docker-entrypoint-initdb.d/init.sh
+    env_file:
+      - ./.env
+    networks:
+      - shared-network
+
+  app:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    container_name: nestjs-app
+    ports:
+      - "${PORT}:${PORT}"
+    environment:
+      DB_HOST: ${DB_HOST}
+      DB_PORT: ${DB_PORT}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      DB_NAME: ${DB_NAME}
+      DB_SCHEMA: ${DB_SCHEMA}
+      PORT: ${PORT}
+      DB_TYPE: ${DB_TYPE}
+      JWT_SECRET: ${JWT_SECRET}
+
+    env_file:
+      - ./.env
+    depends_on:
+      - db
+    networks:
+      - shared-network
+volumes:
+  pg_data:
+
+networks:
+  shared-network:
+    external: true

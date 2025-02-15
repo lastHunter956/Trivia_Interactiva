@@ -1,0 +1,22 @@
+# Ignorar node_modules
+node_modules/
+
+# Ignorar dist
+dist/
+
+# Ignorar archivos de logs generados por npm
+npm-debug.log
+yarn-debug.log
+yarn-error.log
+
+# Ignorar archivos de configuración del editor (por ejemplo, VS Code)
+.vscode/
+
+# Ignorar el archivo package-lock.json si no deseas copiarlo al contenedor
+package-lock.json
+
+# Ignorar cualquier archivo temporal o de sistema
+.DS_Store
+*.log
+*.bak
+*.swp

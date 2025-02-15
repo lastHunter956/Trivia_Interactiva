@@ -8,8 +8,7 @@ services:
     environment:
       - POSTGRES_USER=${POSTGRES_USER}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
-      - DB_NAME=${DB_NAME}
-      - DB_SCHEMA=${DB_SCHEMA}
+      - POSTGRES_DB=${DB_NAME}
     ports:
       - "${DB_PORT}:${DB_PORT}"
     volumes:
@@ -28,15 +27,14 @@ services:
     ports:
       - "${PORT}:${PORT}"
     environment:
-      DB_HOST: ${DB_HOST}
-      DB_PORT: ${DB_PORT}
-      POSTGRES_USER: ${POSTGRES_USER}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-      DB_NAME: ${DB_NAME}
-      DB_SCHEMA: ${DB_SCHEMA}
-      PORT: ${PORT}
-      DB_TYPE: ${DB_TYPE}
-      JWT_SECRET: ${JWT_SECRET}
+      - DB_HOST=${DB_HOST}
+      - DB_PORT=${DB_PORT}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - DB_NAME=${DB_NAME}
+      - PORT=${PORT}
+      - DB_TYPE=${DB_TYPE}
+      - JWT_SECRET={JWT_SECRET}
 
     env_file:
       - ./.env

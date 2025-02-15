@@ -14,9 +14,5 @@ psql -v ON_ERROR_STOP=1 --username "$POSTGRES_USER" <<-EOSQL
     WHERE NOT EXISTS (SELECT FROM pg_database WHERE datname = '$DB_NAME')\gexec
 EOSQL
 
-# Conectar a la base de datos y crear el esquema
-psql -v ON_ERROR_STOP=1 --username "$POSTGRES_USER" --dbname="$DB_NAME" <<-EOSQL
-    CREATE SCHEMA IF NOT EXISTS $DB_SCHEMA;
-EOSQL
 
-echo "✅ Base de datos '$DB_NAME' y esquema '$DB_SCHEMA' creados correctamente."
+echo "✅ Base de datos '$DB_NAME' creados correctamente."

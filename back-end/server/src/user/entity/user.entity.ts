@@ -5,11 +5,13 @@ import {
   OneToMany,
   ManyToOne,
   JoinColumn,
+  OneToOne
 } from 'typeorm';
 import { AbstractEntity } from '../../default/abstract.entity';
 import { refreshTokensEntity } from '../../auth/entity/refreshToken.entity';
 import { resetTokenEntity } from 'src/auth/entity/resetToken.entity';
 import { TypeUserEntity } from 'src/type-user/entity/type-user.entity';
+import { ScoreEntity } from 'src/score/entity/score.entity';
 
 @Entity({ name: 'users' })
 export class UserEntity extends AbstractEntity {
@@ -39,4 +41,8 @@ export class UserEntity extends AbstractEntity {
   })
   @JoinColumn({ name: 'type_id' })
   typeUser: TypeUserEntity;
+
+  @OneToOne(() => ScoreEntity, (score) => score.user, { cascade: true })
+  @JoinColumn({name: "score_id"}) 
+  score: ScoreEntity;
 }

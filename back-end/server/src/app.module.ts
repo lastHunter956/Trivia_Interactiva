@@ -9,6 +9,8 @@ import { TypeUserModule } from './type-user/type-user.module';
 import { CategoryModule } from './category/category.module';
 import { QuestionModule } from './question/question.module';
 import { SeedModule } from './seed/seed.module';
+import { ScoreModule } from './score/score.module';
+import { RankingModule } from './ranking/ranking.module';
 
 
 @Module({
@@ -22,12 +24,11 @@ import { SeedModule } from './seed/seed.module';
     username: process.env.POSTGRES_USER,
     password: process.env.POSTGRES_PASSWORD,
     database: process.env.DB_NAME,
-    schema: process.env.DB_SCHEMA,
     entities: [__dirname + '/**/*.entity{.ts,.js}'],
     synchronize: true,
   }),
   JwtModule.register({ global: true, secret: process.env.JWT_SECRET }),
-    AuthModule, UserModule, TypeUserModule, CategoryModule, QuestionModule, SeedModule],
+    AuthModule, UserModule, TypeUserModule, CategoryModule, QuestionModule, SeedModule, ScoreModule, RankingModule],
   controllers: [],
   providers: [],
 })

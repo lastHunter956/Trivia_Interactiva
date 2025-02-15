@@ -17,37 +17,48 @@ export class SeedService {
   ) {}
 
   async run() {
-    // Verificar si el rol "Admin" ya existe
-    let adminRole = await this.roleRepository.findOne({
-      where: { id_type: 'type_001' },
-    });
+    // Verificar si los roles "Admin" y "Player" existen
+    const adminRole = await this.findOrCreateRole('Admin', 'Administrador del sistema');
+    const playerRole = await this.findOrCreateRole('Player', 'Usuario estándar');
 
-    if (!adminRole) {
-      adminRole = this.roleRepository.create({
-        id_type: await generateId(this.roleRepository, 'id_type', 'type_001'),
-        type_name: 'Admin',
-        type_description: 'Administrador del sistema',
-      });
-      await this.roleRepository.save(adminRole);
-      console.log('✅ Rol "Admin" creado.');
-    }
-
-    // Verificar si el usuario "admin" ya existe
+    // Verificar si el usuario "admin" ya existe por email
     let adminUser = await this.userRepository.findOne({
-      where: { id: 'user_001' },
+      where: { email: 'admin@admin.com' },
     });
 
-    // Hash password
-    const hashedPassword = await bcrypt.hash('admin123', 10);
     if (!adminUser) {
+      const hashedPassword = await bcrypt.hash('admin123', 10);
+
       adminUser = this.userRepository.create({
-        id: await generateId(this.userRepository, 'id', 'user_001'),
+        id: await generateId(this.userRepository, 'id', 'user'),
         email: 'admin@admin.com',
         password: hashedPassword,
         typeUser: { id_type: adminRole.id_type },
       });
+
       await this.userRepository.save(adminUser);
       console.log('✅ Usuario "admin" creado.');
+    } else {
+      console.log('ℹ️ Usuario "admin" ya existe.');
     }
+  }
+
+  // Función para buscar o crear un rol
+  private async findOrCreateRole(type_name: string, type_description: string): Promise<TypeUserEntity> {
+    let role = await this.roleRepository.findOne({ where: { type_name } });
+
+    if (!role) {
+      role = this.roleRepository.create({
+        id_type: await generateId(this.roleRepository, 'id_type', 'type'),
+        type_name,
+        type_description,
+      });
+      await this.roleRepository.save(role);
+      console.log(`✅ Rol "${type_name}" creado.`);
+    } else {
+      console.log(`ℹ️ Rol "${type_name}" ya existe.`);
+    }
+
+    return role;
   }
 }
